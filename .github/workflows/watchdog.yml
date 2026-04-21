@@ -39,8 +39,14 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # 將 history 與 logs 資料夾加入追蹤
-          git add history.txt logs/
+          # 將當下目錄所有的變動（包含新增的檔案）加入追蹤
+          git add -A
           
-          # 檢查是否有變動，有的話才 commit
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: archive monthly Wikipedia records [skip ci]" && git push)
+          # 使用 git status --porcelain 檢查是否有被追蹤的變動
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git commit -m "chore: archive monthly Wikipedia records [skip ci]"
+            git push
+            echo "✅ 紀錄已成功 Commit 並推播！"
+          else
+            echo "⏭️ 沒有產生新的檔案或變動，略過 Commit。"
+          fi

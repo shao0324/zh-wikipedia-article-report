@@ -32,6 +32,7 @@ jobs:
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          KEYWORDS: ${{ vars.KEYWORDS }}
         run: python zh-wikipedia-ariticle-report.py
 
       - name: Commit and push tracking records

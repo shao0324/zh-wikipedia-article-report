@@ -8,11 +8,12 @@ FEED_URLS = [
     "https://zh.wikipedia.org/w/index.php?title=Special:NewPages&feed=atom&limit=50&offset=&namespace=0&username=&tagfilter=&size-mode=min&size=0",
     "https://zh.wikipedia.org/w/index.php?title=Special:NewPages&feed=atom&limit=50&offset=&namespace=14&username=&tagfilter=&size-mode=min&size=0"
 ]
-KEYWORDS = ["羽球", "羽毛球"]
+_kw_env = os.environ.get("KEYWORDS", "")
+KEYWORDS = [k.strip() for k in _kw_env.split(",") if k.strip()] or ["羽球", "羽毛球"]
 HISTORY_FILE = "history.txt"  # 用來記錄所有抓取過的 URL (程式比對用)
 LOG_DIR = "logs"              # 用來存放按月分類的 Markdown 紀錄
 
-EMAIL_TO = os.environ.get("EMAIL_TO", "terry85324@gmail.com")
+EMAIL_TO = os.environ.get("EMAIL_TO")
 EMAIL_FROM = os.environ.get("EMAIL_FROM")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
 SMTP_SERVER = "smtp.gmail.com"
@@ -52,8 +53,8 @@ def append_to_monthly_log(entries, dt):
         f.write("\n")
 
 def send_email(subject, body):
-    if not EMAIL_FROM or not SMTP_PASSWORD:
-        print("未設定 EMAIL_FROM 或 SMTP_PASSWORD，略過發信。")
+    if not EMAIL_FROM or not EMAIL_TO or not SMTP_PASSWORD:
+        print("未設定 EMAIL_FROM、EMAIL_TO 或 SMTP_PASSWORD，略過發信。")
         return
 
     msg = MIMEText(body, "plain", "utf-8")

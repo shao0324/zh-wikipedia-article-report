@@ -32,7 +32,7 @@ jobs:
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-        run: python badminton-article-watchdog-no-pwd.py
+        run: python zh-wikipedia-ariticle-report.py
 
       - name: Commit and push tracking records
         run: |

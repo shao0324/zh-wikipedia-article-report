@@ -1,5 +1,5 @@
 import feedparser
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import os
 import smtplib
 from email.mime.text import MIMEText
@@ -11,6 +11,7 @@ FEED_URLS = [
 _kw_env = os.environ.get("KEYWORDS", "")
 KEYWORDS = [k.strip() for k in _kw_env.split(",") if k.strip()] or ["羽球", "羽毛球"]
 HISTORY_FILE = "history.txt"  # 用來記錄所有抓取過的 URL (程式比對用)
+HISTORY_EXPIRY_DAYS = 30     # 超過此天數的歷史條目自動清除
 LOG_DIR = "logs"              # 用來存放按月分類的 Markdown 紀錄
 
 EMAIL_TO = os.environ.get("EMAIL_TO")
@@ -20,17 +21,50 @@ SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 
 def load_history():
-    """讀取已經抓取過的網址紀錄"""
+    """讀取已抓取過的網址，過濾超過 HISTORY_EXPIRY_DAYS 的條目並回寫檔案。"""
+    today = datetime.now(timezone.utc).date()
+    cutoff = today - timedelta(days=HISTORY_EXPIRY_DAYS)
+    migration_date = today - timedelta(days=HISTORY_EXPIRY_DAYS - 1)  # 舊格式條目約一天後過期
+
     if not os.path.exists(HISTORY_FILE):
         return set()
+
+    surviving = []
+    seen_urls = set()
+
     with open(HISTORY_FILE, "r", encoding="utf-8") as f:
-        return set(line.strip() for line in f if line.strip())
+        for raw in f:
+            line = raw.strip()
+            if not line:
+                continue
+            if "\t" in line:
+                date_str, url = line.split("\t", 1)
+                try:
+                    entry_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+                except ValueError:
+                    continue  # 格式損壞，跳過
+            else:
+                url = line
+                entry_date = migration_date  # 舊格式：指派接近過期的日期
+
+            if entry_date <= cutoff:
+                continue
+            if url not in seen_urls:
+                surviving.append((entry_date, url))
+                seen_urls.add(url)
+
+    with open(HISTORY_FILE, "w", encoding="utf-8") as f:
+        for entry_date, url in surviving:
+            f.write(f"{entry_date.isoformat()}\t{url}\n")
+
+    return seen_urls
 
 def save_history(new_urls):
-    """將新的網址追加到歷史紀錄中"""
+    """將新的網址（附上今日日期）追加到歷史紀錄中。"""
+    today = datetime.now(timezone.utc).date()
     with open(HISTORY_FILE, "a", encoding="utf-8") as f:
         for url in new_urls:
-            f.write(f"{url}\n")
+            f.write(f"{today.isoformat()}\t{url}\n")
 
 def append_to_monthly_log(entries, dt):
     """將新條目以 Markdown 格式追加到當月紀錄檔"""

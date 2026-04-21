@@ -2,8 +2,8 @@ name: Wikipedia Badminton Watchdog
 
 on:
   schedule:
-    # 設定排程，例如每小時的第 0 分執行 (此為 UTC 時間)
-    - cron: '0 * * * *'
+    # 設定排程，每 3 小時執行一次 (此為 UTC 時間)
+    - cron: '0 */3 * * *'
   workflow_dispatch: # 允許在 Actions 頁面手動點擊按鈕觸發，方便測試
 
 permissions:

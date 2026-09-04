@@ -6,7 +6,8 @@ from email.mime.text import MIMEText
 
 FEED_URLS = [
     "https://zh.wikipedia.org/w/index.php?title=Special:NewPages&feed=atom&limit=50&offset=&namespace=0&username=&tagfilter=&size-mode=min&size=0",
-    "https://zh.wikipedia.org/w/index.php?title=Special:NewPages&feed=atom&limit=50&offset=&namespace=14&username=&tagfilter=&size-mode=min&size=0"
+    "https://zh.wikipedia.org/w/index.php?title=Special:NewPages&feed=atom&limit=50&offset=&namespace=14&username=&tagfilter=&size-mode=min&size=0",
+    "https://zh.wikipedia.org/w/index.php?title=Special:NewPages&feed=atom&limit=50&offset=&namespace=10&username=&tagfilter=&size-mode=min&size=0"
 ]
 _kw_env = os.environ.get("KEYWORDS", "")
 KEYWORDS = [k.strip() for k in _kw_env.split(",") if k.strip()] or ["羽球", "羽毛球"]

@@ -12,3 +12,4 @@
 2026-11-23	https://zh.wikipedia.org/wiki/%E6%95%A2%E5%8B%95%E6%87%89%E6%8F%B4%E5%9C%98
 2026-11-23	https://zh.wikipedia.org/wiki/%E9%AD%AF%E7%89%B9%E7%90%B4%E5%A5%8F%E8%80%85
 2026-11-27	https://zh.wikipedia.org/wiki/2026%E5%B9%B4%E4%B8%96%E7%95%8C%E7%BE%BD%E8%81%AF%E4%B8%96%E7%95%8C%E5%B7%A1%E8%BF%B4%E8%B3%BD%E7%B8%BD%E6%B1%BA%E8%B3%BD
+2026-11-28	https://zh.wikipedia.org/wiki/2026%E5%B9%B4%E6%84%9B%E7%88%BE%E8%98%AD%E7%BE%BD%E6%AF%9B%E7%90%83%E5%85%AC%E9%96%8B%E8%B3%BD
